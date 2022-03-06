@@ -1,25 +1,5 @@
-from typing import Optional
-import queue
-
-from fastapi import FastAPI
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
-from services.scheduler.sensor import read_sensor_info
-
-app = FastAPI()
-
-app.queue_system = queue.Queue()
-app.queue_limit = 5
-
-app.scheduler = AsyncIOScheduler()
-app.scheduler.add_job(read_sensor_info, 'interval', seconds=5)
-app.scheduler.start()
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+import uvicorn
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
+if __name__ == '__main__':
+    uvicorn.run("app:app", port=8008, reload=True, access_log=True, log_config='conf.yml', use_colors=True)
