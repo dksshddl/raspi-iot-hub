@@ -1,0 +1,18 @@
+package sensor
+
+import (
+	"fmt"
+	"log"
+
+	"github.com/d2r2/go-dht"
+)
+
+func Read() {
+	temperature, humidity, retried, err := dht.ReadDHTxxWithRetry(dht.DHT11, 4, false, 10)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Print temperature and humidity
+	fmt.Printf("Temperature = %v*C, Humidity = %v%% (retried %d times)\n",
+		temperature, humidity, retried)
+}
